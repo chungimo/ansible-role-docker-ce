@@ -1,0 +1,27 @@
+---
+# tasks file for docker-ce-ansible-role
+
+- name: Install docker-ce (RHEL)
+  include_tasks: install-rhel.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Install docker-ce (Ubuntu)
+  include_tasks: install-ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install docker-compose (ALL)
+  include_tasks: install-docker-compose.yml
+
+- name: Do we need to override the default subnet?
+  debug:
+    var: docker_override_ip
+
+- name: Override default docker subnet (ALL)
+  include_tasks: override-default-subnet.yml
+  when: docker_override_ip == True
+
+- name: Enable Docker CE service on startup
+  service:
+    name: docker
+    state: started
+    enabled: yes

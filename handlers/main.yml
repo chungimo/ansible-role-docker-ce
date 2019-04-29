@@ -1,0 +1,12 @@
+---
+# handlers file for docker-ce
+
+- name: Start Docker CE service
+  service:
+    name: docker
+    state: started
+
+- name: restart docker
+  service:
+    name: docker
+    state: restarted
